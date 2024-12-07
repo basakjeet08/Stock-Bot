@@ -36,7 +36,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request ->
                         request
-                                .requestMatchers(HttpMethod.POST, UrlConstants.REGISTER_EMPLOYEE).hasRole(Employee.EmployeeRole.OWNER.name())
+                                .requestMatchers(HttpMethod.POST, UrlConstants.CREATE_EMPLOYEE).hasRole(Employee.EmployeeRole.OWNER.name())
                                 .requestMatchers(HttpMethod.POST, UrlConstants.LOGIN_EMPLOYEE).permitAll()
                                 .anyRequest().authenticated()
                 )

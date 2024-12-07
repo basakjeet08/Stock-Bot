@@ -18,10 +18,6 @@ public class AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authManager;
 
-    public Employee register(CreateEmployeeRequest employee) {
-        return employeeService.create(employee);
-    }
-
     public TokenWrapper login(CreateEmployeeRequest employee) {
 
         authManager.authenticate(
