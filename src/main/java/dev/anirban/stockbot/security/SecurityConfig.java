@@ -1,6 +1,7 @@
 package dev.anirban.stockbot.security;
 
 import dev.anirban.stockbot.constant.UrlConstants;
+import dev.anirban.stockbot.entity.Employee;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +13,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -34,7 +36,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request ->
                         request
-                                .requestMatchers(HttpMethod.POST, UrlConstants.REGISTER_EMPLOYEE).permitAll()
+                                .requestMatchers(HttpMethod.POST, UrlConstants.REGISTER_EMPLOYEE).hasRole(Employee.EmployeeRole.OWNER.name())
                                 .requestMatchers(HttpMethod.POST, UrlConstants.LOGIN_EMPLOYEE).permitAll()
                                 .anyRequest().authenticated()
                 )
@@ -60,5 +62,10 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
+    }
+
+    @Bean
+    GrantedAuthorityDefaults grantedAuthorityDefaults() {
+        return new GrantedAuthorityDefaults(""); // Remove the "ROLE_" prefix
     }
 }
