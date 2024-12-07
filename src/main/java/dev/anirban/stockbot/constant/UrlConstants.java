@@ -6,5 +6,7 @@ public class UrlConstants {
     public static final String LOGIN_EMPLOYEE = "/login";
 
     // Employee Endpoints
-    public static final String CREATE_EMPLOYEE = "/employees";
+    public static final String CREATE_EMPLOYEE_MANAGER = "/employees/manager";
+    public static final String CREATE_EMPLOYEE_CASHIER = "/employees/cashier";
+    public static final String CREATE_EMPLOYEE_STAFF = "/employees/staff";
 }
