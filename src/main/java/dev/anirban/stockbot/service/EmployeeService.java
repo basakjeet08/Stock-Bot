@@ -98,4 +98,32 @@ public class EmployeeService {
                 .findByUsername(username)
                 .orElseThrow(() -> new EmployeeNotFound(username));
     }
+
+    public Employee update(String username, CreateEmployeeRequest ownerRequest) {
+
+        // Fetching saved Record
+        Employee savedOwner = employeeRepo
+                .findByUsername(username)
+                .orElseThrow(() -> new EmployeeNotFound(username));
+
+        // Username update
+        if (ownerRequest.getUsername() != null && !ownerRequest.getUsername().equals(username)) {
+            if (employeeRepo.findByUsername(ownerRequest.getUsername()).isPresent())
+                throw new EmployeeAlreadyExists(ownerRequest.getUsername());
+
+            savedOwner.setUsername(ownerRequest.getUsername());
+        }
+
+        // Password Update
+        if (ownerRequest.getPassword() != null)
+            savedOwner.setPassword(encoder.encode(ownerRequest.getPassword()));
+
+        // Address Update
+        if (ownerRequest.getAddress() != null)
+            savedOwner.setAddress(ownerRequest.getAddress());
+
+        // Updated at update
+        savedOwner.setUpdatedAt(Timestamp.valueOf(LocalDateTime.now()));
+        return employeeRepo.save(savedOwner);
+    }
 }

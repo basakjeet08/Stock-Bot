@@ -6,7 +6,10 @@ import dev.anirban.stockbot.dto.request.CreateEmployeeRequest;
 import dev.anirban.stockbot.dto.response.ResponseWrapper;
 import dev.anirban.stockbot.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,6 +34,16 @@ public class EmployeeController {
     @PostMapping(UrlConstants.CREATE_EMPLOYEE_STAFF)
     public ResponseWrapper<EmployeeDto> createStaff(@RequestBody CreateEmployeeRequest employeeRequest) {
         EmployeeDto data = service.createStaff(employeeRequest).toEmployeeDto();
+        return new ResponseWrapper<>(data);
+    }
+
+    @PutMapping(UrlConstants.UPDATE_EMPLOYEE)
+    public ResponseWrapper<EmployeeDto> update(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestBody CreateEmployeeRequest ownerRequest
+    ) {
+
+        EmployeeDto data = service.update(userDetails.getUsername(), ownerRequest).toEmployeeDto();
         return new ResponseWrapper<>(data);
     }
 }
