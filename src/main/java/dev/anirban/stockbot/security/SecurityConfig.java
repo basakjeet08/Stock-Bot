@@ -1,7 +1,6 @@
 package dev.anirban.stockbot.security;
 
-import dev.anirban.stockbot.constant.UrlConstants;
-import dev.anirban.stockbot.entity.Employee;
+import dev.anirban.stockbot.util.UrlConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,15 +35,6 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request ->
                         request
-                                .requestMatchers(HttpMethod.POST, UrlConstants.CREATE_EMPLOYEE_MANAGER).hasRole(Employee.EmployeeRole.OWNER.name())
-                                .requestMatchers(HttpMethod.POST, UrlConstants.CREATE_EMPLOYEE_CASHIER).hasAnyRole(
-                                        Employee.EmployeeRole.OWNER.name(),
-                                        Employee.EmployeeRole.MANAGER.name()
-                                )
-                                .requestMatchers(HttpMethod.POST, UrlConstants.CREATE_EMPLOYEE_STAFF).hasAnyRole(
-                                        Employee.EmployeeRole.OWNER.name(),
-                                        Employee.EmployeeRole.MANAGER.name()
-                                )
                                 .requestMatchers(HttpMethod.POST, UrlConstants.LOGIN_EMPLOYEE).permitAll()
                                 .anyRequest().authenticated()
                 )

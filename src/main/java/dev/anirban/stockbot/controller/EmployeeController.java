@@ -1,6 +1,7 @@
 package dev.anirban.stockbot.controller;
 
-import dev.anirban.stockbot.constant.UrlConstants;
+import dev.anirban.stockbot.entity.Employee;
+import dev.anirban.stockbot.util.UrlConstants;
 import dev.anirban.stockbot.dto.common.EmployeeDto;
 import dev.anirban.stockbot.dto.request.CreateEmployeeRequest;
 import dev.anirban.stockbot.dto.response.ResponseWrapper;
@@ -19,21 +20,12 @@ public class EmployeeController {
 
     private final EmployeeService service;
 
-    @PostMapping(UrlConstants.CREATE_EMPLOYEE_MANAGER)
-    public ResponseWrapper<EmployeeDto> createManager(@RequestBody CreateEmployeeRequest employeeRequest) {
-        EmployeeDto data = service.createManager(employeeRequest).toEmployeeDto();
-        return new ResponseWrapper<>(data);
-    }
-
-    @PostMapping(UrlConstants.CREATE_EMPLOYEE_CASHIER)
-    public ResponseWrapper<EmployeeDto> createCashier(@RequestBody CreateEmployeeRequest employeeRequest) {
-        EmployeeDto data = service.createCashier(employeeRequest).toEmployeeDto();
-        return new ResponseWrapper<>(data);
-    }
-
-    @PostMapping(UrlConstants.CREATE_EMPLOYEE_STAFF)
-    public ResponseWrapper<EmployeeDto> createStaff(@RequestBody CreateEmployeeRequest employeeRequest) {
-        EmployeeDto data = service.createStaff(employeeRequest).toEmployeeDto();
+    @PostMapping(UrlConstants.CREATE_EMPLOYEE)
+    public ResponseWrapper<EmployeeDto> create(
+            @AuthenticationPrincipal Employee employee,
+            @RequestBody CreateEmployeeRequest employeeRequest
+    ) {
+        EmployeeDto data = service.create(employee, employeeRequest).toEmployeeDto();
         return new ResponseWrapper<>(data);
     }
 

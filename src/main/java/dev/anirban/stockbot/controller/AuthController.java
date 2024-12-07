@@ -1,6 +1,6 @@
 package dev.anirban.stockbot.controller;
 
-import dev.anirban.stockbot.constant.UrlConstants;
+import dev.anirban.stockbot.util.UrlConstants;
 import dev.anirban.stockbot.dto.request.CreateEmployeeRequest;
 import dev.anirban.stockbot.dto.response.ResponseWrapper;
 import dev.anirban.stockbot.dto.response.TokenWrapper;
