@@ -3,6 +3,7 @@ package dev.anirban.stockbot.service;
 import dev.anirban.stockbot.dto.request.CreateEmployeeRequest;
 import dev.anirban.stockbot.entity.Employee;
 import dev.anirban.stockbot.exception.EmployeeAlreadyExists;
+import dev.anirban.stockbot.exception.EmployeeNotFound;
 import dev.anirban.stockbot.repo.EmployeeRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -41,5 +42,11 @@ public class EmployeeService {
                 .build();
 
         return employeeRepo.save(newEmployee);
+    }
+
+    public Employee findByUsername(String username) {
+        return employeeRepo
+                .findByUsername(username)
+                .orElseThrow(() -> new EmployeeNotFound(username));
     }
 }

@@ -4,8 +4,13 @@ package dev.anirban.stockbot.entity;
 import dev.anirban.stockbot.dto.common.EmployeeDto;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.sql.Timestamp;
+import java.util.Collection;
+import java.util.List;
 
 @Getter
 @Setter
@@ -15,7 +20,7 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @Entity
 @Table(name = "EMPLOYEE")
-public class Employee {
+public class Employee implements UserDetails {
 
     public enum EmployeeRole {
         OWNER, MANAGER, CASHIER, STAFF
@@ -63,5 +68,30 @@ public class Employee {
                 .joiningDate(joiningDate)
                 .roles(roles)
                 .build();
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(roles.name()));
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
