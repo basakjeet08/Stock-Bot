@@ -20,4 +20,10 @@ public class GlobalExceptionHandler {
         ResponseWrapper<Object> response = new ResponseWrapper<>(exception.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(PermissionDenied.class)
+    public ResponseEntity<ResponseWrapper<Object>> handlePermissionDenied(PermissionDenied exception) {
+        ResponseWrapper<Object> response = new ResponseWrapper<>(exception.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+    }
 }

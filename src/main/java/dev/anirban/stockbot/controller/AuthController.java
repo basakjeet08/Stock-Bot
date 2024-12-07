@@ -18,13 +18,13 @@ public class AuthController {
 
     private final AuthService service;
 
-    @PostMapping(UrlConstants.REGISTER_USER)
+    @PostMapping(UrlConstants.REGISTER_EMPLOYEE)
     public ResponseWrapper<EmployeeDto> create(@RequestBody CreateEmployeeRequest employeeRequest) {
         EmployeeDto data = service.register(employeeRequest).toEmployeeDto();
         return new ResponseWrapper<>(data);
     }
 
-    @PostMapping(UrlConstants.LOGIN_USER)
+    @PostMapping(UrlConstants.LOGIN_EMPLOYEE)
     public ResponseWrapper<TokenWrapper> login(@RequestBody CreateEmployeeRequest employeeRequest) {
         TokenWrapper data = service.login(employeeRequest);
         return new ResponseWrapper<>(data);

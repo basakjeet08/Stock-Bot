@@ -3,8 +3,6 @@ package dev.anirban.stockbot.service;
 import dev.anirban.stockbot.dto.request.CreateEmployeeRequest;
 import dev.anirban.stockbot.entity.Employee;
 import dev.anirban.stockbot.exception.EmployeeAlreadyExists;
-import dev.anirban.stockbot.exception.EmployeeNotFound;
-import dev.anirban.stockbot.exception.PermissionDenied;
 import dev.anirban.stockbot.repo.EmployeeRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,22 +14,19 @@ import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
-public class EmployeeService {
+public class OwnerService {
 
     private final EmployeeRepo employeeRepo;
     private final PasswordEncoder encoder;
 
-    public Employee create(CreateEmployeeRequest employeeRequest) {
+    public void create(CreateEmployeeRequest employeeRequest) {
 
         // Checking if the record is present
         if (employeeRepo.findByUsername(employeeRequest.getUsername()).isPresent())
             throw new EmployeeAlreadyExists(employeeRequest.getUsername());
 
-        if (employeeRequest.getRoles() == Employee.EmployeeRole.OWNER)
-            throw new PermissionDenied();
-
         // Creating new Entry
-        Employee newEmployee = Employee
+        Employee newOwner = Employee
                 .builder()
                 .name(employeeRequest.getName())
                 .username(employeeRequest.getUsername())
@@ -44,12 +39,6 @@ public class EmployeeService {
                 .updatedAt(Timestamp.valueOf(LocalDateTime.now()))
                 .build();
 
-        return employeeRepo.save(newEmployee);
-    }
-
-    public Employee findByUsername(String username) {
-        return employeeRepo
-                .findByUsername(username)
-                .orElseThrow(() -> new EmployeeNotFound(username));
+        employeeRepo.save(newOwner);
     }
 }
