@@ -29,7 +29,7 @@ public class EmployeeService {
         if (employeeRepo.findByUsername(employeeRequest.getUsername()).isPresent())
             throw new EmployeeAlreadyExists(employeeRequest.getUsername());
 
-        if (!HierarchyValidator.isHierarchyValid(requester.getRoles(), employeeRequest.getRoles()))
+        if (HierarchyValidator.isHierarchyInvalid(requester.getRoles(), employeeRequest.getRoles()))
             throw new PermissionDenied();
 
         // Creating new Entry
@@ -55,20 +55,16 @@ public class EmployeeService {
                 .orElseThrow(() -> new EmployeeNotFound(username));
     }
 
-    public Employee update(String username, CreateEmployeeRequest ownerRequest) {
+    public Employee update(Employee requester, CreateEmployeeRequest ownerRequest) {
 
         // Fetching saved Record
         Employee savedOwner = employeeRepo
-                .findByUsername(username)
-                .orElseThrow(() -> new EmployeeNotFound(username));
+                .findByUsername(ownerRequest.getUsername())
+                .orElseThrow(() -> new EmployeeNotFound(ownerRequest.getUsername()));
 
-        // Username update
-        if (ownerRequest.getUsername() != null && !ownerRequest.getUsername().equals(username)) {
-            if (employeeRepo.findByUsername(ownerRequest.getUsername()).isPresent())
-                throw new EmployeeAlreadyExists(ownerRequest.getUsername());
-
-            savedOwner.setUsername(ownerRequest.getUsername());
-        }
+        // Validating Hierarchy
+        if (HierarchyValidator.isHierarchyInvalid(requester.getRoles(), savedOwner.getRoles()))
+            throw new PermissionDenied();
 
         // Password Update
         if (ownerRequest.getPassword() != null)
@@ -77,6 +73,16 @@ public class EmployeeService {
         // Address Update
         if (ownerRequest.getAddress() != null)
             savedOwner.setAddress(ownerRequest.getAddress());
+
+        // Update Role
+        if (ownerRequest.getRoles() != null) {
+
+            // Validating Hierarchy
+            if (HierarchyValidator.isHierarchyInvalid(requester.getRoles(), ownerRequest.getRoles()))
+                throw new PermissionDenied();
+
+            savedOwner.setRoles(ownerRequest.getRoles());
+        }
 
         // Updated at update
         savedOwner.setUpdatedAt(Timestamp.valueOf(LocalDateTime.now()));

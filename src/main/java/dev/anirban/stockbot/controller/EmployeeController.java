@@ -31,11 +31,11 @@ public class EmployeeController {
 
     @PutMapping(UrlConstants.UPDATE_EMPLOYEE)
     public ResponseWrapper<EmployeeDto> update(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal Employee employee,
             @RequestBody CreateEmployeeRequest ownerRequest
     ) {
 
-        EmployeeDto data = service.update(userDetails.getUsername(), ownerRequest).toEmployeeDto();
+        EmployeeDto data = service.update(employee, ownerRequest).toEmployeeDto();
         return new ResponseWrapper<>(data);
     }
 }

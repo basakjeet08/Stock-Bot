@@ -15,7 +15,7 @@ public class HierarchyValidator {
         hierarchy.put(Employee.EmployeeRole.STAFF, 3);
     }
 
-    public static boolean isHierarchyValid(Employee.EmployeeRole requesterRole, Employee.EmployeeRole operatedOnRole) {
-        return hierarchy.get(requesterRole) < hierarchy.get(operatedOnRole);
+    public static boolean isHierarchyInvalid(Employee.EmployeeRole requesterRole, Employee.EmployeeRole operatedOnRole) {
+        return hierarchy.get(requesterRole) >= hierarchy.get(operatedOnRole);
     }
 }
