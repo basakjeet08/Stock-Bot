@@ -1,6 +1,7 @@
 package dev.anirban.stockbot.controller;
 
 
+import dev.anirban.stockbot.dto.common.SupplierDto;
 import dev.anirban.stockbot.dto.response.ResponseWrapper;
 import dev.anirban.stockbot.entity.Supplier;
 import dev.anirban.stockbot.service.SupplierService;
@@ -17,26 +18,31 @@ public class SupplierController {
     private final SupplierService service;
 
     @PostMapping(UrlConstants.CREATE_SUPPLIER)
-    public ResponseWrapper<Supplier> create(@RequestBody Supplier supplier) {
-        Supplier data = service.create(supplier);
+    public ResponseWrapper<SupplierDto> create(@RequestBody SupplierDto supplier) {
+        SupplierDto data = service.create(supplier).toSupplierDto();
         return new ResponseWrapper<>(data);
     }
 
     @GetMapping(UrlConstants.FIND_ALL_SUPPLIERS)
-    public ResponseWrapper<List<Supplier>> findAll() {
-        List<Supplier> data = service.findAll();
+    public ResponseWrapper<List<SupplierDto>> findAll() {
+        List<SupplierDto> data = service
+                .findAll()
+                .stream()
+                .map(Supplier::toSupplierDto)
+                .toList();
+
         return new ResponseWrapper<>(data);
     }
 
     @GetMapping(UrlConstants.FIND_SUPPLIER_BY_ID)
-    public ResponseWrapper<Supplier> findById(@PathVariable Integer id) {
-        Supplier data = service.findById(id);
+    public ResponseWrapper<SupplierDto> findById(@PathVariable Integer id) {
+        SupplierDto data = service.findById(id).toSupplierDto();
         return new ResponseWrapper<>(data);
     }
 
     @PutMapping(UrlConstants.UPDATE_SUPPLIER)
-    public ResponseWrapper<Supplier> update(@RequestBody Supplier supplier) {
-        Supplier data = service.update(supplier);
+    public ResponseWrapper<SupplierDto> update(@RequestBody SupplierDto supplier) {
+        SupplierDto data = service.update(supplier).toSupplierDto();
         return new ResponseWrapper<>(data);
     }
 

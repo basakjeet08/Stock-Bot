@@ -37,6 +37,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request ->
                         request
                                 .requestMatchers(HttpMethod.POST, UrlConstants.LOGIN_EMPLOYEE).permitAll()
+
+                                // Supplier Endpoints
                                 .requestMatchers(HttpMethod.POST, UrlConstants.CREATE_SUPPLIER).hasAnyRole(
                                         Employee.EmployeeRole.OWNER.name(),
                                         Employee.EmployeeRole.MANAGER.name()
@@ -46,6 +48,12 @@ public class SecurityConfig {
                                         Employee.EmployeeRole.MANAGER.name()
                                 )
                                 .requestMatchers(HttpMethod.DELETE, UrlConstants.DELETE_SUPPLIER).hasAnyRole(
+                                        Employee.EmployeeRole.OWNER.name(),
+                                        Employee.EmployeeRole.MANAGER.name()
+                                )
+
+                                // Product Endpoints
+                                .requestMatchers(HttpMethod.POST, UrlConstants.CREATE_PRODUCT).hasAnyRole(
                                         Employee.EmployeeRole.OWNER.name(),
                                         Employee.EmployeeRole.MANAGER.name()
                                 )

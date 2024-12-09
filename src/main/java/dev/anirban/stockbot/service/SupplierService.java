@@ -1,6 +1,7 @@
 package dev.anirban.stockbot.service;
 
 
+import dev.anirban.stockbot.dto.common.SupplierDto;
 import dev.anirban.stockbot.entity.Supplier;
 import dev.anirban.stockbot.exception.SupplierNotFound;
 import dev.anirban.stockbot.repo.SupplierRepo;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -17,7 +19,7 @@ public class SupplierService {
 
     private final SupplierRepo supplierRepo;
 
-    public Supplier create(Supplier supplier) {
+    public Supplier create(SupplierDto supplier) {
 
         Supplier newSupplier = Supplier
                 .builder()
@@ -26,6 +28,7 @@ public class SupplierService {
                 .contactNo(supplier.getContactNo())
                 .createdAt(Timestamp.valueOf(LocalDateTime.now()))
                 .updatedAt(Timestamp.valueOf(LocalDateTime.now()))
+                .productList(new HashSet<>())
                 .build();
 
         return supplierRepo.save(newSupplier);
@@ -42,7 +45,7 @@ public class SupplierService {
                 .orElseThrow(() -> new SupplierNotFound(id));
     }
 
-    public Supplier update(Supplier supplier) {
+    public Supplier update(SupplierDto supplier) {
 
         Supplier savedSupplier = findById(supplier.getId());
 

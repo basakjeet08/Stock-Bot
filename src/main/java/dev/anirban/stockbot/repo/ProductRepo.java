@@ -1,0 +1,7 @@
+package dev.anirban.stockbot.repo;
+
+import dev.anirban.stockbot.entity.Product;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ProductRepo extends JpaRepository<Product, Integer> {
+}

@@ -1,10 +1,12 @@
 package dev.anirban.stockbot.entity;
 
 
+import dev.anirban.stockbot.dto.common.SupplierDto;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Timestamp;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -35,4 +37,26 @@ public class Supplier {
 
     @Column(name = "updated_at", nullable = false)
     private Timestamp updatedAt;
+
+    @OneToMany(
+            mappedBy = "suppliedBy",
+            fetch = FetchType.LAZY,
+            cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST}
+    )
+    private Set<Product> productList;
+
+    public void addProduct(Product product) {
+        productList.add(product);
+        product.setSuppliedBy(this);
+    }
+
+    public SupplierDto toSupplierDto(){
+        return SupplierDto
+                .builder()
+                .id(id)
+                .name(name)
+                .address(address)
+                .contactNo(contactNo)
+                .build();
+    }
 }
