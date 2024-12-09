@@ -65,6 +65,13 @@ public class SecurityConfig {
                                         Employee.EmployeeRole.OWNER.name(),
                                         Employee.EmployeeRole.MANAGER.name()
                                 )
+
+                                // Restock Endpoints
+                                .requestMatchers(HttpMethod.POST, UrlConstants.CREATE_RESTOCK).hasAnyRole(
+                                        Employee.EmployeeRole.OWNER.name(),
+                                        Employee.EmployeeRole.MANAGER.name(),
+                                        Employee.EmployeeRole.STAFF.name()
+                                )
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

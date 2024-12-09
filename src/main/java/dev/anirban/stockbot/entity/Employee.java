@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -57,6 +58,18 @@ public class Employee implements UserDetails {
 
     @Column(name = "updated_at", nullable = false)
     private Timestamp updatedAt;
+
+    @OneToMany(
+            mappedBy = "requestedBy",
+            fetch = FetchType.LAZY,
+            cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST}
+    )
+    private Set<Restock> restockList;
+
+    public void addRestock(Restock restock) {
+        restockList.add(restock);
+        restock.setRequestedBy(this);
+    }
 
     public EmployeeDto toEmployeeDto() {
         return EmployeeDto

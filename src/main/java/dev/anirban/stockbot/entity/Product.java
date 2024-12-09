@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Timestamp;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -55,6 +56,18 @@ public class Product {
     )
     @JoinColumn(name = "supplied_by_id")
     private Supplier suppliedBy;
+
+    @OneToMany(
+            mappedBy = "productRequested",
+            fetch = FetchType.LAZY,
+            cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST}
+    )
+    private Set<Restock> restockList;
+
+    public void addRestock(Restock restock) {
+        restockList.add(restock);
+        restock.setProductRequested(this);
+    }
 
     public ProductDto toProductDto() {
         return ProductDto

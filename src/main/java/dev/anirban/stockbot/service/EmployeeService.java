@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 
 
@@ -45,6 +46,7 @@ public class EmployeeService {
                 .roles(employeeRequest.getRoles())
                 .createdAt(Timestamp.valueOf(LocalDateTime.now()))
                 .updatedAt(Timestamp.valueOf(LocalDateTime.now()))
+                .restockList(new HashSet<>())
                 .build();
 
         return employeeRepo.save(newEmployee);

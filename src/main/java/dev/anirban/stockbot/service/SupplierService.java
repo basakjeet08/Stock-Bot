@@ -29,6 +29,7 @@ public class SupplierService {
                 .createdAt(Timestamp.valueOf(LocalDateTime.now()))
                 .updatedAt(Timestamp.valueOf(LocalDateTime.now()))
                 .productList(new HashSet<>())
+                .restockList(new HashSet<>())
                 .build();
 
         return supplierRepo.save(newSupplier);

@@ -45,9 +45,21 @@ public class Supplier {
     )
     private Set<Product> productList;
 
+    @OneToMany(
+            mappedBy = "requestedTo",
+            fetch = FetchType.LAZY,
+            cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST}
+    )
+    private Set<Restock> restockList;
+
     public void addProduct(Product product) {
         productList.add(product);
         product.setSuppliedBy(this);
+    }
+
+    public void addRestock(Restock restock) {
+        restockList.add(restock);
+        restock.setRequestedTo(this);
     }
 
     public void removeProduct(Product product) {

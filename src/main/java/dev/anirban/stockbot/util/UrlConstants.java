@@ -25,4 +25,8 @@ public class UrlConstants {
     public static final String FIND_PRODUCT_BY_ID = "/products/{id}";
     public static final String UPDATE_PRODUCT = "/products";
     public static final String DELETE_PRODUCT = "/products/{id}";
+
+    // Restock Endpoints
+    public static final String CREATE_RESTOCK = "/restocks";
+    public static final String FIND_ALL_RESTOCK = "/restocks";
 }

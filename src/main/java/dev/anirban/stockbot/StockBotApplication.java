@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 
 @SpringBootApplication
 @RequiredArgsConstructor
@@ -38,6 +39,7 @@ public class StockBotApplication {
                     .roles(Employee.EmployeeRole.OWNER)
                     .createdAt(Timestamp.valueOf(LocalDateTime.now()))
                     .updatedAt(Timestamp.valueOf(LocalDateTime.now()))
+                    .restockList(new HashSet<>())
                     .build();
 
             employeeRepo.save(newOwner);
