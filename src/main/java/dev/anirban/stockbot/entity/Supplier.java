@@ -50,7 +50,12 @@ public class Supplier {
         product.setSuppliedBy(this);
     }
 
-    public SupplierDto toSupplierDto(){
+    public void removeProduct(Product product) {
+        productList.remove(product);
+        product.setSuppliedBy(null);
+    }
+
+    public SupplierDto toSupplierDto() {
         return SupplierDto
                 .builder()
                 .id(id)

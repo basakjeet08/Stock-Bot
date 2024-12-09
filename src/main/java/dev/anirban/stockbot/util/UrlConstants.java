@@ -19,4 +19,7 @@ public class UrlConstants {
     // Product Endpoints
     public static final String CREATE_PRODUCT = "/products";
     public static final String FIND_ALL_PRODUCT = "/products";
+    public static final String FIND_PRODUCT_BY_ID = "/products/{id}";
+    public static final String UPDATE_PRODUCT = "/products";
+    public static final String DELETE_PRODUCT = "/products/{id}";
 }

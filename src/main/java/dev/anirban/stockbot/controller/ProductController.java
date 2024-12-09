@@ -7,10 +7,7 @@ import dev.anirban.stockbot.entity.Product;
 import dev.anirban.stockbot.service.ProductService;
 import dev.anirban.stockbot.util.UrlConstants;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -35,5 +32,23 @@ public class ProductController {
                 .toList();
 
         return new ResponseWrapper<>(data);
+    }
+
+    @GetMapping(UrlConstants.FIND_PRODUCT_BY_ID)
+    public ResponseWrapper<ProductDto> findById(@PathVariable Integer id) {
+        ProductDto data = service.findById(id).toProductDto();
+        return new ResponseWrapper<>(data);
+    }
+
+    @PutMapping(UrlConstants.UPDATE_PRODUCT)
+    public ResponseWrapper<ProductDto> update(@RequestBody ProductDto productDto) {
+        ProductDto data = service.update(productDto).toProductDto();
+        return new ResponseWrapper<>(data);
+    }
+
+    @DeleteMapping(UrlConstants.DELETE_PRODUCT)
+    public ResponseWrapper<Void> deleteById(@PathVariable Integer id) {
+        service.deleteById(id);
+        return new ResponseWrapper<>("Product with ID : " + id + " is deleted successfully");
     }
 }
