@@ -1,5 +1,6 @@
 package dev.anirban.stockbot.security;
 
+import dev.anirban.stockbot.entity.Employee;
 import dev.anirban.stockbot.util.UrlConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -36,6 +37,18 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request ->
                         request
                                 .requestMatchers(HttpMethod.POST, UrlConstants.LOGIN_EMPLOYEE).permitAll()
+                                .requestMatchers(HttpMethod.POST, UrlConstants.CREATE_SUPPLIER).hasAnyRole(
+                                        Employee.EmployeeRole.OWNER.name(),
+                                        Employee.EmployeeRole.MANAGER.name()
+                                )
+                                .requestMatchers(HttpMethod.PUT, UrlConstants.UPDATE_SUPPLIER).hasAnyRole(
+                                        Employee.EmployeeRole.OWNER.name(),
+                                        Employee.EmployeeRole.MANAGER.name()
+                                )
+                                .requestMatchers(HttpMethod.DELETE, UrlConstants.DELETE_SUPPLIER).hasAnyRole(
+                                        Employee.EmployeeRole.OWNER.name(),
+                                        Employee.EmployeeRole.MANAGER.name()
+                                )
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
