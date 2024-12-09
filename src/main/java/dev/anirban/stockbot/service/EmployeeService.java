@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Service
@@ -49,10 +50,32 @@ public class EmployeeService {
         return employeeRepo.save(newEmployee);
     }
 
+    public Employee findById(Integer id) {
+        return employeeRepo
+                .findById(id)
+                .orElseThrow(() -> new EmployeeNotFound(id));
+    }
+
+    public List<Employee> findAll() {
+        return employeeRepo.findAll();
+    }
+
     public Employee findByUsername(String username) {
         return employeeRepo
                 .findByUsername(username)
                 .orElseThrow(() -> new EmployeeNotFound(username));
+    }
+
+    public List<Employee> findByNameContaining(String name) {
+        return employeeRepo.findByNameContaining(name);
+    }
+
+    public List<Employee> findByRoles(Employee.EmployeeRole roles) {
+        return employeeRepo.findByRoles(roles);
+    }
+
+    public List<Employee> findByRolesAndNameContaining(Employee.EmployeeRole roles, String name) {
+        return employeeRepo.findByRolesAndNameContaining(roles, name);
     }
 
     public Employee update(Employee requester, CreateEmployeeRequest ownerRequest) {
@@ -87,5 +110,14 @@ public class EmployeeService {
         // Updated at update
         savedOwner.setUpdatedAt(Timestamp.valueOf(LocalDateTime.now()));
         return employeeRepo.save(savedOwner);
+    }
+
+    public void deleteById(Employee requester, Integer id) {
+        Employee savedEmployee = findById(id);
+
+        if (HierarchyValidator.isHierarchyInvalid(requester.getRoles(), savedEmployee.getRoles()))
+            throw new PermissionDenied();
+
+        employeeRepo.deleteById(id);
     }
 }

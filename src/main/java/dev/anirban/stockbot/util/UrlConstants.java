@@ -8,6 +8,9 @@ public class UrlConstants {
     // Employee Endpoints (Create)
     public static final String CREATE_EMPLOYEE = "/employees";
     public static final String UPDATE_EMPLOYEE = "/employees";
+    public static final String FIND_EMPLOYEE_BY_ID = "/employees/{id}";
+    public static final String FIND_EMPLOYEE_QUERY = "/employees";
+    public static final String DELETE_EMPLOYEE = "/employees/{id}";
 
     // Supplier Endpoints
     public static final String CREATE_SUPPLIER = "/suppliers";
