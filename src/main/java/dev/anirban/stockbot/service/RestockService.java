@@ -48,6 +48,14 @@ public class RestockService {
         return restockRepo.save(newRestock);
     }
 
+    private int findRestockOrderValue(Product savedProduct, RestockDto restock) {
+        int ordered = restock.getQuantityOrdered();
+        int capacity = savedProduct.getHoldingCapacity();
+        int current = savedProduct.getQuantity();
+
+        return Math.min(capacity - current, ordered);
+    }
+
     public List<Restock> findAll() {
         return restockRepo.findAll();
     }
@@ -58,12 +66,26 @@ public class RestockService {
                 .orElseThrow(() -> new RestockNotFound(id));
     }
 
-    private int findRestockOrderValue(Product savedProduct, RestockDto restock) {
-        int ordered = restock.getQuantityOrdered();
-        int capacity = savedProduct.getHoldingCapacity();
-        int current = savedProduct.getQuantity();
+    public Restock update(RestockDto restockDto) {
+        Restock savedRestock = findById(restockDto.getId());
 
-        return Math.min(capacity - current, ordered);
+        if (restockDto.getCost() != null)
+            savedRestock.setCost(restockDto.getCost());
+        if (restockDto.getStatus() != null) {
+            if (restockDto.getStatus() == Restock.Status.DELIVERED) {
+
+                // Updating Products
+                Product savedProduct = savedRestock.getProductRequested();
+                savedProduct.setQuantity(savedRestock.getQuantityOrdered() + savedProduct.getQuantity());
+
+                savedRestock.setDeliveredDate(Timestamp.valueOf(LocalDateTime.now()));
+            }
+
+            savedRestock.setStatus(restockDto.getStatus());
+        }
+
+        savedRestock.setUpdatedAt(Timestamp.valueOf(LocalDateTime.now()));
+        return restockRepo.save(savedRestock);
     }
 
     public void deleteById(Integer id) {

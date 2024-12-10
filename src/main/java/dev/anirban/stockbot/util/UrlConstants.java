@@ -30,5 +30,6 @@ public class UrlConstants {
     public static final String CREATE_RESTOCK = "/restocks";
     public static final String FIND_RESTOCK_BY_ID = "/restocks/{id}";
     public static final String FIND_ALL_RESTOCK = "/restocks";
+    public static final String UPDATE_RESTOCK = "/restocks";
     public static final String DELETE_RESTOCK = "/restocks/{id}";
 }

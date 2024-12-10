@@ -72,6 +72,15 @@ public class SecurityConfig {
                                         Employee.EmployeeRole.MANAGER.name(),
                                         Employee.EmployeeRole.STAFF.name()
                                 )
+                                .requestMatchers(HttpMethod.PUT, UrlConstants.UPDATE_RESTOCK).hasAnyRole(
+                                        Employee.EmployeeRole.OWNER.name(),
+                                        Employee.EmployeeRole.MANAGER.name(),
+                                        Employee.EmployeeRole.STAFF.name()
+                                )
+                                .requestMatchers(HttpMethod.DELETE, UrlConstants.DELETE_RESTOCK).hasAnyRole(
+                                        Employee.EmployeeRole.OWNER.name(),
+                                        Employee.EmployeeRole.MANAGER.name()
+                                )
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

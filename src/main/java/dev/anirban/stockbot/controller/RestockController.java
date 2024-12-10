@@ -44,6 +44,12 @@ public class RestockController {
         return new ResponseWrapper<>(data);
     }
 
+    @PutMapping(UrlConstants.UPDATE_RESTOCK)
+    public ResponseWrapper<RestockDto> update(@RequestBody RestockDto restockDto) {
+        RestockDto data = service.update(restockDto).toRestockDto();
+        return new ResponseWrapper<>(data);
+    }
+
 
     @DeleteMapping(UrlConstants.DELETE_RESTOCK)
     public ResponseWrapper<Void> deleteById(@PathVariable Integer id) {
