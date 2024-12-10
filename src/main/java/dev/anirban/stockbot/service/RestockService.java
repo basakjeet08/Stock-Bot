@@ -5,6 +5,7 @@ import dev.anirban.stockbot.entity.Employee;
 import dev.anirban.stockbot.entity.Product;
 import dev.anirban.stockbot.entity.Restock;
 import dev.anirban.stockbot.entity.Supplier;
+import dev.anirban.stockbot.exception.RestockNotFound;
 import dev.anirban.stockbot.repo.RestockRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,7 @@ public class RestockService {
 
         Restock newRestock = Restock
                 .builder()
-                .quantityOrdered(restockDto.getQuantityOrdered())
+                .quantityOrdered(findRestockOrderValue(savedProduct, restockDto))
                 .orderedDate(Timestamp.valueOf(LocalDateTime.now()))
                 .deliveredDate(null)
                 .cost(restockDto.getCost())
@@ -49,5 +50,26 @@ public class RestockService {
 
     public List<Restock> findAll() {
         return restockRepo.findAll();
+    }
+
+    public Restock findById(Integer id) {
+        return restockRepo
+                .findById(id)
+                .orElseThrow(() -> new RestockNotFound(id));
+    }
+
+    private int findRestockOrderValue(Product savedProduct, RestockDto restock) {
+        int ordered = restock.getQuantityOrdered();
+        int capacity = savedProduct.getHoldingCapacity();
+        int current = savedProduct.getQuantity();
+
+        return Math.min(capacity - current, ordered);
+    }
+
+    public void deleteById(Integer id) {
+        if (!restockRepo.existsById(id))
+            throw new RestockNotFound(id);
+
+        restockRepo.deleteById(id);
     }
 }

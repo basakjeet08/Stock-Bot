@@ -8,10 +8,7 @@ import dev.anirban.stockbot.service.RestockService;
 import dev.anirban.stockbot.util.UrlConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,6 +27,12 @@ public class RestockController {
         return new ResponseWrapper<>(data);
     }
 
+    @GetMapping(UrlConstants.FIND_RESTOCK_BY_ID)
+    public ResponseWrapper<RestockDto> findById(@PathVariable Integer id) {
+        RestockDto data = service.findById(id).toRestockDto();
+        return new ResponseWrapper<>(data);
+    }
+
     @GetMapping(UrlConstants.FIND_ALL_RESTOCK)
     public ResponseWrapper<List<RestockDto>> findAll() {
         List<RestockDto> data = service
@@ -39,5 +42,13 @@ public class RestockController {
                 .toList();
 
         return new ResponseWrapper<>(data);
+    }
+
+
+    @DeleteMapping(UrlConstants.DELETE_RESTOCK)
+    public ResponseWrapper<Void> deleteById(@PathVariable Integer id) {
+        service.deleteById(id);
+
+        return new ResponseWrapper<>("Restock entry with ID : " + id + " is deleted successfully !!");
     }
 }
